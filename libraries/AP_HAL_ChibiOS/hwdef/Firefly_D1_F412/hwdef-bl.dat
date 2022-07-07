@@ -2,7 +2,7 @@
 # for minimal F405 bootloader
 
 # MCU class and specific type
-MCU STM32F4xx STM32F405xx
+MCU STM32F4xx STM32F412Rx
 
 # board ID for firmware load
 APJ_BOARD_ID 125
