@@ -16,9 +16,6 @@ define HAL_STORAGE_SIZE 8192
 # board ID for firmware load
 APJ_BOARD_ID 1055
 
-# setup build for a peripheral firmware
-env AP_PERIPH 1
-
 STM32_ST_USE_TIMER 5
 
 # enable watchdog
@@ -36,7 +33,7 @@ FLASH_SIZE_KB 1024
 I2C_ORDER I2C1 I2C3
 
 # order of UARTs (and USB)
-SERIAL_ORDER UART1 UART4 UART5 UART6
+SERIAL_ORDER USART1 EMPTY EMPTY USART6
 
 PB8 I2C1_SCL I2C1
 PB9 I2C1_SDA I2C1
@@ -67,32 +64,21 @@ PA10 TIM1_CH3 TIM1 PWM(6) GPIO(55)
 PA11 TIM1_CH4 TIM1 PWM(7) GPIO(56)
 PC8  TIM3_CH3 TIM3 PWM(8) GPIO(57)
 
-define HAL_STORAGE_SIZE 15360
-STORAGE_FLASH_PAGE 2
 
-# reserve 32k for bootloader and 32k for flash storage
-FLASH_RESERVE_START_KB 64
+define HAL_USE_ADC TRUE
+define STM32_ADC_USE_ADC1 TRUE
+#define HAL_DISABLE_ADC_DRIVER TRUE
+PA0 VSENSE ADC1 SCALE(2)
 
-# one IMU
-IMU Invensense I2C:0:0x68 ROTATION_YAW_180
 
-# probe for I2C BMP280, but allow init on board variants without onboard baro too
-BARO BMP280 I2C:0:0x76
-define HAL_PROBE_EXTERNAL_I2C_BAROS
-define HAL_BARO_ALLOW_INIT_NO_BARO
+define STM32_PWM_USE_ADVANCED TRUE
+# disable parachute and sprayer to save flash
+define HAL_PARACHUTE_ENABLED 0
+define HAL_SPRAYER_ENABLED 0
 
-# no built-in compass, but probe the i2c bus for all possible
-# external compass types
-define ALLOW_ARM_NO_COMPASS
-define HAL_PROBE_EXTERNAL_I2C_COMPASSES
-define HAL_I2C_INTERNAL_MASK 0
-define HAL_COMPASS_AUTO_ROT_DEFAULT 2
+# save FLASH, but leave above when flash issue is fixed
+define HAL_MINIMIZE_FEATURES 1
+
 
 # reduce max size of embedded params for apj_tool.py
 define AP_PARAM_MAX_EMBEDDED_PARAM 1024
-
-# save some flash
-define HAL_GENERATOR_ENABLED 0
-define AC_OAPATHPLANNER_ENABLED 0
-define PRECISION_LANDING 0
-define AP_OPTICALFLOW_ENABLED 0
